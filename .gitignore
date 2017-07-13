@@ -1,0 +1,35 @@
+# IntelliJ specific files/directories
+#####################################
+.idea
+*.ipr
+*.iws
+*.iml
+
+# Build output directies
+########################
+build
+
+# Gradle Files #
+################
+.gradle
+
+# Editor Files #
+################
+*~
+*.swp
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log

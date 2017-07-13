@@ -1,0 +1,60 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+plugins {
+    id "nebula.ospackage" version "3.4.0"
+}
+
+group 'org.openchs'
+version = '0.0.1'
+
+ospackage {
+    packageName = 'openchs'
+    release = '1'
+    arch = NOARCH
+    os = LINUX
+    user = 'root'
+
+    preInstall file("${projectDir}/scripts/preinstall.sh")
+    postInstall file("${projectDir}/scripts/postinstall.sh")
+    preUninstall file("${projectDir}/scripts/preuninstall.sh")
+    postUninstall file("${projectDir}/scripts/postuninstall.sh")
+
+
+    into '/opt/openchs'
+
+    from("${projectDir}/resources/openchs-server*.jar") {
+        fileMode = 0644
+        createDirectoryEntry = true
+        into 'lib/'
+    }
+
+    from("${projectDir}/scripts/rpm/") {
+        fileMode = 0744
+        createDirectoryEntry = true
+        into 'bin'
+    }
+
+    from("${projectDir}/resources/placeholder") {
+        createDirectoryEntry = true
+        into 'etc'
+    }
+
+    from("${projectDir}/resources/placeholder") {
+        createDirectoryEntry = true
+        into 'run'
+    }
+
+    from("${projectDir}/resources/placeholder") {
+        createDirectoryEntry = true
+        into 'log'
+    }
+
+
+}
+
+buildRpm {
+}
