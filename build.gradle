@@ -8,12 +8,20 @@ plugins {
     id "nebula.ospackage" version "3.4.0"
 }
 
+task normalizeJarName(type: Copy) {
+    println 'normalizeJarName'
+    from "${projectDir}" + "/resources/"
+    into "${buildDir}" + "/libs/"
+    include('openchs-server-0.1-SNAPSHOT.jar')
+    rename('openchs-server-0.1-SNAPSHOT.jar', 'openchs.jar')
+}
+
 group 'org.openchs'
-version = '0.0.1'
+version = project.openchsRelease
 
 ospackage {
     packageName = 'openchs'
-    release = '1'
+    release = project.buildNumber
     arch = NOARCH
     os = LINUX
     user = 'root'
@@ -26,21 +34,22 @@ ospackage {
 
     into '/opt/openchs'
 
-    from("${projectDir}/resources/openchs-server*.jar") {
+    from("${buildDir}/libs/openchs.jar") {
         fileMode = 0644
         createDirectoryEntry = true
         into 'lib/'
+    }
+
+    from("${projectDir}/resources/") {
+        createDirectoryEntry = true
+        into 'etc'
+        include('openchs.conf')
     }
 
     from("${projectDir}/scripts/rpm/") {
         fileMode = 0744
         createDirectoryEntry = true
         into 'bin'
-    }
-
-    from("${projectDir}/resources/placeholder") {
-        createDirectoryEntry = true
-        into 'etc'
     }
 
     from("${projectDir}/resources/placeholder") {
@@ -57,4 +66,5 @@ ospackage {
 }
 
 buildRpm {
+    dependsOn 'normalizeJarName'
 }
