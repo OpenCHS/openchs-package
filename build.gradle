@@ -31,6 +31,7 @@ ospackage {
     preUninstall file("${projectDir}/scripts/preuninstall.sh")
     postUninstall file("${projectDir}/scripts/postuninstall.sh")
 
+    requires('postgresql94')
 
     into '/opt/openchs'
 
@@ -44,6 +45,12 @@ ospackage {
         createDirectoryEntry = true
         into 'etc'
         include('openchs.conf')
+    }
+
+    from("${projectDir}/resources/external/") {
+        createDirectoryEntry = true
+        into 'external'
+        include('*')
     }
 
     from("${projectDir}/scripts/rpm/") {
