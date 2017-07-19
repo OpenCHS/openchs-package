@@ -10,6 +10,8 @@
 export OPENCHS_SERVER_USER=openchs
 export OPENCHS_SERVER_RUN=/opt/openchs/bin/start.sh
 export OPENCHS_SERVER_DEBUG=/opt/openchs/bin/debug.sh
+export OPENCHS_INSTALL_HEALTH_MODULES=/opt/openchs/bin/install_health_modules.sh
+export OPENCHS_SETUP_IMPL=/opt/openchs/bin/setup_impl.sh
 export CUR_USER=`/usr/bin/whoami`
 
 . /etc/openchs/openchs.conf
@@ -92,6 +94,34 @@ user_exists(){
         fi
 }
 
+install_health_modules() {
+          pid=$(openchs_pid)
+          if [ -n "$pid" ]; then
+                            if [ `user_exists $OPENCHS_SERVER_USER` = "1" ]  && [ "$CUR_USER" != "$OPENCHS_SERVER_USER" ] ;
+                            then
+                                    su -s /bin/bash $OPENCHS_SERVER_USER $OPENCHS_INSTALL_HEALTH_MODULES
+                            else
+                                    sh $OPENCHS_INSTALL_HEALTH_MODULES
+                            fi
+          else echo -e "\e[00;31mService openchs is not running\e[00m"
+          exit 3
+          fi
+}
+
+setup_impl_db() {
+          pid=$(openchs_pid)
+          if [ -n "$pid" ]; then
+                  if [ `user_exists $OPENCHS_SERVER_USER` = "1" ]  && [ "$CUR_USER" != "$OPENCHS_SERVER_USER" ] ;
+                  then
+                          su -s /bin/bash $OPENCHS_SERVER_USER $OPENCHS_SETUP_IMPL
+                  else
+                          sh $OPENCHS_SETUP_IMPL
+                  fi
+          else echo -e "\e[00;31mService openchs is not running\e[00m"
+          exit 3
+          fi
+}
+
 case $1 in
 	start)
 	  start
@@ -111,6 +141,12 @@ case $1 in
 	;;
 	kill)
 		stop
+	;;
+	install_health_modules)
+	    install_health_modules
+	;;
+	setup_impl_db)
+	    setup_impl_db
 	;;
 	*)
 

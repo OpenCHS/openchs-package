@@ -9,12 +9,22 @@ plugins {
 }
 
 task normalizeJarName(type: Copy) {
-    println 'normalizeJarName'
     from "${projectDir}" + "/resources/"
     into "${buildDir}" + "/libs/"
     include('openchs-server-0.1-SNAPSHOT.jar')
     rename('openchs-server-0.1-SNAPSHOT.jar', 'openchs.jar')
 }
+
+task extractHealthModules(type: Copy) {
+    from tarTree(resources.gzip("${projectDir}/resources/openchs_health_modules.tar.gz"))
+    into file("${buildDir}/health_modules")
+}
+
+task extractImplSetup(type: Copy) {
+    from tarTree(resources.gzip("${projectDir}/resources/openchs_impl.tar.gz"))
+    into file("${buildDir}/impl")
+}
+
 
 group 'org.openchs'
 version = project.openchsRelease
@@ -47,11 +57,6 @@ ospackage {
         include('openchs.conf')
     }
 
-    from("${projectDir}/resources/external/") {
-        createDirectoryEntry = true
-        into 'external'
-        include('*')
-    }
 
     from("${projectDir}/scripts/rpm/") {
         fileMode = 0744
@@ -69,9 +74,24 @@ ospackage {
         into 'log'
     }
 
+    from("${projectDir}/resources/app.apk") {
+        createDirectoryEntry = true
+        into 'external'
+    }
+
+    from("${buildDir}/health_modules/") {
+        createDirectoryEntry = true
+        into 'health_modules'
+    }
+
+    from("${buildDir}/impl/") {
+        createDirectoryEntry = true
+        into 'impl'
+    }
+
 
 }
 
 buildRpm {
-    dependsOn 'normalizeJarName'
+    dependsOn 'normalizeJarName', 'extractHealthModules', 'extractImplSetup'
 }
