@@ -11,3 +11,12 @@ Copy the following to resources
 and then Run
 
 ./gradlew clean -PopenchsRelease=<release-number> -PbuildNumber=<build-number> buildRpm
+
+After installation of rpm, to run
+
+service openchs start
+
+service openchs deploy_health_modules
+
+service openchs deploy_impl
+
