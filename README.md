@@ -20,3 +20,10 @@ service openchs deploy_health_modules
 
 service openchs deploy_impl
 
+To access the app
+curl http://localhost:8021
+
+The app apk can be downloaded from 
+
+curl http://localhost:8021/ext/app.apk
+
