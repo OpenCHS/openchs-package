@@ -25,5 +25,5 @@ curl http://localhost:8021
 
 The app apk can be downloaded from 
 
-curl http://localhost:8021/ext/app.apk
+http://localhost:8021/ext/app.apk
 
