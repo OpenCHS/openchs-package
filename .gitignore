@@ -33,3 +33,7 @@ build
 # Logs and databases #
 ######################
 *.log
+
+resources/*.apk
+resources/*.tar.gz
+resources/*.jar

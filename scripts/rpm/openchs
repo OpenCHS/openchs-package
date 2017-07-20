@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# openelis        start/stop/status/debug/restart script
+# openchs        start/stop/status/debug/restart/deploy_health_modules/deploy_impl script
 #
 # chkconfig: - 64 36
 # processname: openchs
@@ -10,8 +10,8 @@
 export OPENCHS_SERVER_USER=openchs
 export OPENCHS_SERVER_RUN=/opt/openchs/bin/start.sh
 export OPENCHS_SERVER_DEBUG=/opt/openchs/bin/debug.sh
-export OPENCHS_INSTALL_HEALTH_MODULES=/opt/openchs/bin/install_health_modules.sh
-export OPENCHS_SETUP_IMPL=/opt/openchs/bin/setup_impl.sh
+export OPENCHS_DEPLOY_HEALTH_MODULES=/opt/openchs/bin/deploy_health_modules.sh
+export OPENCHS_DEPLOY_IMPL=/opt/openchs/bin/deploy_impl.sh
 export CUR_USER=`/usr/bin/whoami`
 
 . /etc/openchs/openchs.conf
@@ -94,28 +94,28 @@ user_exists(){
         fi
 }
 
-install_health_modules() {
+deploy_health_modules() {
           pid=$(openchs_pid)
           if [ -n "$pid" ]; then
                             if [ `user_exists $OPENCHS_SERVER_USER` = "1" ]  && [ "$CUR_USER" != "$OPENCHS_SERVER_USER" ] ;
                             then
-                                    su -s /bin/bash $OPENCHS_SERVER_USER $OPENCHS_INSTALL_HEALTH_MODULES
+                                    su -s /bin/bash $OPENCHS_SERVER_USER $OPENCHS_DEPLOY_HEALTH_MODULES
                             else
-                                    sh $OPENCHS_INSTALL_HEALTH_MODULES
+                                    sh $OPENCHS_DEPLOY_HEALTH_MODULES
                             fi
           else echo -e "\e[00;31mService openchs is not running\e[00m"
           exit 3
           fi
 }
 
-setup_impl_db() {
+deploy_impl() {
           pid=$(openchs_pid)
           if [ -n "$pid" ]; then
                   if [ `user_exists $OPENCHS_SERVER_USER` = "1" ]  && [ "$CUR_USER" != "$OPENCHS_SERVER_USER" ] ;
                   then
-                          su -s /bin/bash $OPENCHS_SERVER_USER $OPENCHS_SETUP_IMPL
+                          su -s /bin/bash $OPENCHS_SERVER_USER $OPENCHS_DEPLOY_IMPL
                   else
-                          sh $OPENCHS_SETUP_IMPL
+                          sh $OPENCHS_DEPLOY_IMPL
                   fi
           else echo -e "\e[00;31mService openchs is not running\e[00m"
           exit 3
@@ -142,11 +142,11 @@ case $1 in
 	kill)
 		stop
 	;;
-	install_health_modules)
-	    install_health_modules
+	deploy_health_modules)
+	    deploy_health_modules
 	;;
-	setup_impl_db)
-	    setup_impl_db
+	deploy_impl)
+	    deploy_impl
 	;;
 	*)
 

@@ -11,8 +11,8 @@ plugins {
 task normalizeJarName(type: Copy) {
     from "${projectDir}" + "/resources/"
     into "${buildDir}" + "/libs/"
-    include('openchs-server-0.1-SNAPSHOT.jar')
-    rename('openchs-server-0.1-SNAPSHOT.jar', 'openchs.jar')
+    include('openchs-server*.jar')
+    rename('openchs-server.*.jar', 'openchs.jar')
 }
 
 task extractHealthModules(type: Copy) {
