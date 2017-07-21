@@ -21,10 +21,6 @@ create_dirs() {
         ln -s /opt/openchs/run /var/run/openchs
     fi
 
-    if [[ ! -e /var/run/openchs/openchs ]]; then
-        ln -s /opt/openchs/openchs /var/run/openchs/openchs
-    fi
-
     if [[ ! -e /var/log/openchs ]]; then
         ln -s /opt/openchs/log /var/log/openchs
     fi

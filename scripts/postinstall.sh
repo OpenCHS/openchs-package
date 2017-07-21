@@ -47,7 +47,7 @@ if [ "${IS_PASSIVE:-0}" -ne "1" ]; then
     fi
 fi
 
-chkconfig --add openchs
+chkconfig openchs on
 
 # permissions
 chown -R openchs:openchs /opt/openchs

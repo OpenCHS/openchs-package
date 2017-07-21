@@ -65,11 +65,13 @@ ospackage {
     }
 
     from("${projectDir}/resources/placeholder") {
+        fileMode = 0644
         createDirectoryEntry = true
         into 'run'
     }
 
     from("${projectDir}/resources/placeholder") {
+        fileMode = 0644
         createDirectoryEntry = true
         into 'log'
     }
