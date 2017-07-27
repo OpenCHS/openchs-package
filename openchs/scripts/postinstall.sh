@@ -2,18 +2,18 @@
 
 OPENCHS_DB_SERVER=localhost #default for manual/non ansible RPM installs
 
-. /etc/openchs/openchs.conf
-
 #create openchs user and group if doesn't exist
 USERID=openchs
 GROUPID=openchs
 /bin/id -g $GROUPID 2>/dev/null
-[ $? -eq 1 ]
+if [ $? -eq 1 ]; then
 groupadd openchs
+fi
 
 /bin/id $USERID 2>/dev/null
-[ $? -eq 1 ]
+if [ $? -eq 1 ]; then
 useradd -g openchs openchs
+fi
 
 #create links
 ln -s /opt/openchs/etc /etc/openchs
@@ -26,7 +26,7 @@ setupConfFiles() {
     	rm -f /etc/httpd/conf.d/opnechs_ssl.conf
     	cp -f /opt/openchs/etc/openchs_ssl.conf /etc/httpd/conf.d/openchs_ssl.conf
 }
-#setupConfFiles
+setupConfFiles
 
 #create a database if it doesn't exist and if it is not passive machine.
 if [ "${IS_PASSIVE:-0}" -ne "1" ]; then

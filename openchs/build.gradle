@@ -79,6 +79,12 @@ ospackage {
         into 'external'
     }
 
+    from("${projectDir}/resources/") {
+        fileMode = 0755
+        into 'etc'
+        include('openchs_ssl.conf')
+    }
+
     from("${buildDir}/health_modules/") {
         createDirectoryEntry = true
         into 'health_modules'

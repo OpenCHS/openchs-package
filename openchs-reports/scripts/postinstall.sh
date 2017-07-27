@@ -21,9 +21,9 @@ ln -s /opt/openchs-reports/log /var/log/openchs-reports
 
 setupConfFiles() {
     	rm -f /etc/httpd/conf.d/openchs-reports_ssl.conf
-    	cp -f /opt/openchs-reports/etc/openchs-reports_ssl.conf /etc/httpd/conf.d/openchs-reports_ssl.conf
+    	cp -f /opt/openchs-reports/etc/openchs_reports_ssl.conf /etc/httpd/conf.d/openchs_reports_ssl.conf
 }
-#setupConfFiles
+setupConfFiles
 
 chkconfig openchs-reports on
 

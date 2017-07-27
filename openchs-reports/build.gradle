@@ -57,6 +57,13 @@ ospackage {
         into 'log'
     }
 
+    from("${projectDir}/resources/") {
+        fileMode = 0755
+        into 'etc'
+        include('openchs_reports_ssl.conf')
+    }
+
+
 }
 
 buildRpm {
