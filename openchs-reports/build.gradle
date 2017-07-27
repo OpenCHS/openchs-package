@@ -8,29 +8,12 @@ plugins {
     id "nebula.ospackage" version "3.4.0"
 }
 
-task normalizeJarName(type: Copy) {
-    from "${projectDir}" + "/resources/"
-    into "${buildDir}" + "/libs/"
-    include('openchs-server*.jar')
-    rename('openchs-server.*.jar', 'openchs.jar')
-}
-
-task extractHealthModules(type: Copy) {
-    from tarTree(resources.gzip("${projectDir}/resources/openchs_health_modules.tar.gz"))
-    into file("${buildDir}/health_modules")
-}
-
-task extractImplSetup(type: Copy) {
-    from tarTree(resources.gzip("${projectDir}/resources/openchs_impl.tar.gz"))
-    into file("${buildDir}/impl")
-}
-
 
 group 'org.openchs'
 version = project.openchsRelease
 
 ospackage {
-    packageName = 'openchs'
+    packageName = 'openchs-reports'
     release = project.buildNumber
     arch = NOARCH
     os = LINUX
@@ -41,9 +24,9 @@ ospackage {
     preUninstall file("${projectDir}/scripts/preuninstall.sh")
     postUninstall file("${projectDir}/scripts/postuninstall.sh")
 
-    into '/opt/openchs'
+    into '/opt/openchs-reports'
 
-    from("${buildDir}/libs/openchs.jar") {
+    from("${projectDir}/resources/metabase.jar") {
         fileMode = 0644
         createDirectoryEntry = true
         into 'lib/'
@@ -52,7 +35,7 @@ ospackage {
     from("${projectDir}/resources/") {
         createDirectoryEntry = true
         into 'etc'
-        include('openchs.conf')
+        include('openchs-reports.conf')
     }
 
 
@@ -74,24 +57,8 @@ ospackage {
         into 'log'
     }
 
-    from("${projectDir}/resources/app.apk") {
-        createDirectoryEntry = true
-        into 'external'
-    }
-
-    from("${buildDir}/health_modules/") {
-        createDirectoryEntry = true
-        into 'health_modules'
-    }
-
-    from("${buildDir}/impl/") {
-        createDirectoryEntry = true
-        into 'impl'
-    }
-
-
 }
 
 buildRpm {
-    dependsOn 'normalizeJarName', 'extractHealthModules', 'extractImplSetup'
 }
+
