@@ -3,6 +3,12 @@ Scripts for generating openchs installer packages for different operating system
 
 This builds rpms for openchs server and openchs-reports
 
+This is multi-project gradle build. Copy the relevant artifacts and run
+
+```./gradlew clean buildRpm``` 
+
+to generate the two RPMs
+
 OpenCHS server
 --------------
 
@@ -16,7 +22,7 @@ Copy the following to resources
 
 and then Run
 
-```./gradlew clean buildRpm```
+```./gradlew clean openchs:buildRpm```
 
 It takes parameters openchsRelease and buildNumber
 
@@ -25,6 +31,7 @@ It takes parameters openchsRelease and buildNumber
 ```service openchs start```
 
 First time -- To deploy health modules
+
 ```service openchs deploy_health_modules```
 
 ```service openchs deploy_impl```
@@ -38,3 +45,24 @@ The app apk can be downloaded from
 
 http://yourdomainname/openchs/ext/app.apk
 
+OpenCHS Reports
+---------------
+OpenCHS reports uses metabase
+
+### For Local Development
+
+Run the metabase.jar from openchs-reports/resources which has h2 databases
+
+Login credentials : admin@openchs.org / passw0rd
+
+### To create rpm
+
+```./gradlew clean openchs-reports:buildRpm```
+
+### To run reports service
+
+```service openchs-reports start```
+
+### To access reports
+
+http://yourdomainname/openchsreports
