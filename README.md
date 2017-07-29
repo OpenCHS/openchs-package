@@ -1,7 +1,13 @@
 # openchs-package
 Scripts for generating openchs installer packages for different operating systems
 
-To package RPM
+This builds rpms for openchs server and openchs-reports
+
+OpenCHS server
+--------------
+
+### To create rpm
+
 Copy the following to resources
 1. app.apk
 2. openchs-server jar
@@ -10,20 +16,25 @@ Copy the following to resources
 
 and then Run
 
-./gradlew clean -PopenchsRelease=<release-number> -PbuildNumber=<build-number> buildRpm
+```./gradlew clean buildRpm```
 
-After installation of rpm, to run
+It takes parameters openchsRelease and buildNumber
 
-service openchs start
+### To run the service
 
-service openchs deploy_health_modules
+```service openchs start```
 
-service openchs deploy_impl
+First time -- To deploy health modules
+```service openchs deploy_health_modules```
 
-To access the app
-curl http://localhost:8021
+```service openchs deploy_impl```
+
+The service by default starts on 8021 port
+
+### To access the app
+http://yourdomainname/openchs
 
 The app apk can be downloaded from 
 
-http://localhost:8021/ext/app.apk
+http://yourdomainname/openchs/ext/app.apk
 
