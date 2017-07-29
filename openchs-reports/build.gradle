@@ -33,6 +33,13 @@ ospackage {
     }
 
     from("${projectDir}/resources/") {
+        fileMode = 0644
+        createDirectoryEntry = true
+        include('metabase.db.mv.db')
+        include('metabase.db.trace.db')
+    }
+
+    from("${projectDir}/resources/") {
         createDirectoryEntry = true
         into 'etc'
         include('openchs-reports.conf')
