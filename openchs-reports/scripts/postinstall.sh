@@ -3,12 +3,12 @@
 #create openchs user and group if doesn't exist
 USERID=openchs
 GROUPID=openchs
-/bin/id -g $GROUPID 2>/dev/null
+id -g $GROUPID
 if [ $? -eq 1 ]; then
 groupadd openchs
 fi
 
-/bin/id $USERID 2>/dev/null
+id $USERID
 if [ $? -eq 1 ]; then
 useradd -g openchs openchs
 fi
