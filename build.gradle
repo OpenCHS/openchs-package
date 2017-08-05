@@ -1,0 +1,32 @@
+
+plugins {
+    id 'org.hidetake.ssh' version '2.9.0'
+}
+
+remotes {
+    webServer {
+        host = '192.168.33.11'
+        user = 'vagrant'
+        identity = file(System.properties['user.home'] + "/.ssh/id_rsa")
+    }
+}
+
+task build_and_fetch_artifacts(type: Exec) {
+    commandLine './build_and_fetch_artifacts.sh'
+}
+
+task copyRpms(type: Copy) {
+    from subprojects.collect { it.tasks.withType(Rpm) }
+    into "$buildDir/distributions"
+}
+
+task deploy {
+    doLast {
+        ssh.run {
+            session(remotes.webServer) {
+                execute 'sudo service openchs stop'
+                execute 'sudo service openchs-reports stop'
+            }
+        }
+    }
+}
