@@ -1,31 +1,53 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
 
 plugins {
     id 'org.hidetake.ssh' version '2.9.0'
 }
 
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
 remotes {
-    webServer {
+    vagrant {
         host = '192.168.33.11'
         user = 'vagrant'
         identity = file(System.properties['user.home'] + "/.ssh/id_rsa")
     }
 }
 
-task build_and_fetch_artifacts(type: Exec) {
-    commandLine './build_and_fetch_artifacts.sh'
+task build_and_fetch_resources(type: Exec) {
+    commandLine './build_and_fetch_resources.sh'
 }
 
-task copyRpms(type: Copy) {
-    from subprojects.collect { it.tasks.withType(Rpm) }
+task collectRpms(type: Copy) {
+    from {subprojects.buildRpm}
     into "$buildDir/distributions"
 }
+def artifactsDir = "/tmp/openchs_support/artifacts/release-${project.openchsRelease}"
 
 task deploy {
+    dependsOn 'collectRpms'
     doLast {
         ssh.run {
-            session(remotes.webServer) {
+            session(remotes.vagrant) {
+                execute "mkdir -p $artifactsDir"
+                put from: "${buildDir}/distributions/openchs-${project.openchsRelease}-${project.buildNumber}.noarch.rpm",
+                        into: "$artifactsDir"
+                put from: "${buildDir}/distributions/openchs-reports-${project.openchsRelease}-${project.buildNumber}.noarch.rpm",
+                        into: "$artifactsDir"
                 execute 'sudo service openchs stop'
                 execute 'sudo service openchs-reports stop'
+                execute 'sudo rpm -e openchs'
+                execute 'sudo rpm -e openchs-reports'
+                execute "sudo rpm -ivh $artifactsDir/openchs-${project.openchsRelease}-${project.buildNumber}.noarch.rpm"
+                execute "sudo rpm -ivh $artifactsDir/openchs-reports-${project.openchsRelease}-${project.buildNumber}.noarch.rpm"
+                execute 'sudo service openchs start'
+                execute 'sudo service openchs-reports start'
             }
         }
     }
