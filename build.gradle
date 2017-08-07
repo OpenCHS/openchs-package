@@ -13,9 +13,9 @@ task clean(type: Delete) {
 }
 
 remotes {
-    vagrant {
-        host = '192.168.33.11'
-        user = 'vagrant'
+    deploy_env {
+        host = project.deploy_host
+        user = project.deploy_user
         identity = file(System.properties['user.home'] + "/.ssh/id_rsa")
     }
 }
@@ -34,7 +34,7 @@ task deploy {
     dependsOn 'collectRpms'
     doLast {
         ssh.run {
-            session(remotes.vagrant) {
+            session(remotes.deploy_env) {
                 execute "mkdir -p $artifactsDir"
                 put from: "${buildDir}/distributions/openchs-${project.openchsRelease}-${project.buildNumber}.noarch.rpm",
                         into: "$artifactsDir"
