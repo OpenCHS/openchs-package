@@ -40,13 +40,17 @@ task deploy {
                         into: "$artifactsDir"
                 put from: "${buildDir}/distributions/openchs-reports-${project.openchsRelease}-${project.buildNumber}.noarch.rpm",
                         into: "$artifactsDir"
-                execute 'sudo service openchs stop'
-                execute 'sudo service openchs-reports stop'
-                execute 'sudo rpm -e openchs'
-                execute 'sudo rpm -e openchs-reports'
+                execute 'sudo service openchs stop', ignoreError: true
+                execute 'sudo service openchs-reports stop', ignoreError: true
+                execute 'sudo rpm -e openchs', ignoreError: true
+                execute 'sudo rpm -e openchs-reports', ignoreError: true
+                execute 'psql -U openchs -c \"DROP SCHEMA openchs CASCADE;\"', ignoreError: true
                 execute "sudo rpm -ivh $artifactsDir/openchs-${project.openchsRelease}-${project.buildNumber}.noarch.rpm"
                 execute "sudo rpm -ivh $artifactsDir/openchs-reports-${project.openchsRelease}-${project.buildNumber}.noarch.rpm"
                 execute 'sudo service openchs start'
+                execute 'sleep 20'
+                execute 'sudo service openchs deploy_health_modules'
+                execute 'sudo service openchs deploy_impl'
                 execute 'sudo service openchs-reports start'
             }
         }
