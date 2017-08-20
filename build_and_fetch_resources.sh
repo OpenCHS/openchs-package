@@ -1,5 +1,5 @@
 cd ../openchs-server && git stash && git pull && mvn clean install -DskipTests
-cd ../openchs-package && cp ../openchs-server/target/openchs-server*jar ./openchs/resources/
+cd ../openchs-package && cp ../openchs-server/openchs-server-api/target/openchs-server*jar ./openchs/resources/
 cd ../openchs-client && git stash && git pull && make release KEYSTORE_PASSWORD=helloworld KEY_PASSWORD=helloworld
 cd ../openchs-package && cp ../openchs-client/android/app/build/outputs/apk/app-release.apk ./openchs/resources/app.apk
 cd ../lokbiradari-vhw && git stash && git pull && make package_health_modules && make package_impl
