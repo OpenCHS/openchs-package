@@ -36,7 +36,6 @@ ospackage {
         fileMode = 0644
         createDirectoryEntry = true
         include('metabase.db.mv.db')
-        include('metabase.db.trace.db')
     }
 
     from("${projectDir}/resources/") {

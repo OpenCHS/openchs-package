@@ -33,6 +33,7 @@ build
 # Logs and databases #
 ######################
 *.log
+openchs-reports/resources/metabase.db.trace.db
 
 */resources/*.apk
 */resources/*.tar.gz
