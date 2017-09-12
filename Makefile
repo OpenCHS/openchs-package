@@ -28,12 +28,12 @@ start_metabase: ## Starts metabase server
 
 # <data>
 deploy_data: ## Deploys health modules and lbp-implementation data
-	cd ../openchs-health-modules && make deploy
+	cd ../openchs-client/packages/openchs-health-modules && make deploy
 	cd ../lbp-arogyadoot && make deploy
 
 redeploy_data: ## Clean deploys health modules and lbp-implementation data
 	cd ../openchs-server && make redeploy_schema
-	cd ../openchs-health-modules && make deploy
+	cd ../openchs-client/packages/openchs-health-modules && make deploy
 	cd ../lbp-arogyadoot && make deploy
 # </data>
 
