@@ -14,12 +14,11 @@ help: ## Targets which do not have help text are not shown
 # </makefile>
 
 
+# <metabase>
 metabase_version=v0.25.2
 
-
-# <metabase>
-download_metabase: ## Downloads metabase jar
-	cd openchs-reports/resources/ && curl -O http://downloads.metabase.com/$(metabase_version)/metabase.jar
+download_metabase: ## Downloads metabase jar; uses wget
+	cd openchs-reports/resources/ && wget -c --retry-connrefused --tries=0 http://downloads.metabase.com/$(metabase_version)/metabase.jar
 
 start_metabase: ## Starts metabase server
 	cd openchs-reports/resources && java -jar metabase.jar
@@ -42,3 +41,9 @@ redeploy_data: ## Clean deploys health modules and lbp-implementation data
 package: ## Clean deploys health modules and lbp-implementation data
 	./gradlew clean collectRpms
 # <package>
+
+# <source>
+source_pull:
+	cd ../openchs-server/ && git pull
+	cd ../openchs-client/ && git pull
+# </source>
